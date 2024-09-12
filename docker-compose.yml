@@ -1,0 +1,63 @@
+version: "3.7"
+services:
+  db:
+    image: postgres:15
+    container_name: db_app
+    command: -p 1221
+    expose:
+      - 1221
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - django_app:/var/lib/postgresql/data
+ 
+
+  app:
+    build:
+      context: .
+    env_file:
+      - .env
+    container_name: django_app
+    command: ["./docker/app.sh"]
+    expose:
+      - "8000"  # Открывает порт 9999 внутри сети Docker, но не на хосте
+    depends_on:
+      - db
+    volumes:
+      - static_volume:/app/staticfiles
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_1
+    ports:
+      - "8091:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    
+  nginx:
+    build: ./nginx
+    container_name: nginx_app
+    volumes:
+      - static_volume:/app/staticfiles
+    ports:
+      - "1337:80"
+    depends_on:
+      - app  
+  
+
+
+
+volumes:
+  static_volume:
+  pgadmin_data:
+  django_app:
+    external: true      
+
+
+
+    
