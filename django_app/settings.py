@@ -16,15 +16,9 @@ DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = [HOST]
 
-# CSRF_COOKIE_SECURE = False
-# CSRF_USE_SESSIONS = False
-
-
-
-
 CSRF_TRUSTED_ORIGINS = [
     f'http://{HOST}:{PORT}',
-    f'https://{HOST}:{PORT}',  # Если вы используете HTTPS
+    f'https://{HOST}:{PORT}',
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -34,7 +28,6 @@ CORS_ALLOWED_ORIGINS = [
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-
 
 
 SIMPLE_JWT = {
